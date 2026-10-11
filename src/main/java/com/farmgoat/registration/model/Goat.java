@@ -11,6 +11,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OrderBy;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.persistence.CascadeType;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -42,7 +43,11 @@ public class Goat {
     @JoinColumn(name = "farmer_id", nullable = false)
     private Farmer farmer;
 
-    @OneToMany(mappedBy = "goat", orphanRemoval = true)
+    @OneToMany(
+            mappedBy = "goat",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
     @OrderBy("vaccinationDate DESC, id DESC")
     private List<Vaccination> vaccinations = new ArrayList<>();
 
