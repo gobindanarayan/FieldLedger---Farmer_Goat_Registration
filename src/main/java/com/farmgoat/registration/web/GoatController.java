@@ -56,6 +56,16 @@ public class GoatController {
         return "goats/details";
     }
 
+    @PostMapping("/{goatId}/delete")
+    public String delete(@PathVariable Long goatId, RedirectAttributes redirectAttributes) {
+        Goat goat = goatRepository.findById(goatId).orElse(null);
+        if (goat == null) return "redirect:/goats?missing";
+
+        goatRepository.delete(goat);
+        redirectAttributes.addFlashAttribute("success", "Goat and its vaccination records deleted.");
+        return "redirect:/goats";
+    }
+
     @GetMapping("/farmer/{farmerId}/new")
     public String newGoat(@PathVariable Long farmerId, Model model) {
         Farmer farmer = farmerRepository.findById(farmerId).orElse(null);
@@ -88,7 +98,7 @@ public class GoatController {
         goat.setBreed(goatForm.getBreed().trim());
         goat.setGender(goatForm.getGender());
         goat.setDateOfBirth(goatForm.getDateOfBirth());
-        goat.setFarmer(farmer);
+        farmer.addGoat(goat);
         goatRepository.save(goat);
         redirectAttributes.addFlashAttribute("success", "Goat registered successfully.");
         return "redirect:/goats/" + goat.getId();
@@ -128,7 +138,7 @@ public class GoatController {
         vaccination.setVaccinationDate(vaccinationForm.getVaccinationDate());
         vaccination.setNextDueDate(vaccinationForm.getNextDueDate());
         vaccination.setNotes(vaccinationForm.getNotes() == null ? "" : vaccinationForm.getNotes().trim());
-        vaccination.setGoat(goat);
+        goat.addVaccination(vaccination);
         vaccinationRepository.save(vaccination);
         redirectAttributes.addFlashAttribute("success", "Vaccination record added.");
         return "redirect:/goats/" + goatId;

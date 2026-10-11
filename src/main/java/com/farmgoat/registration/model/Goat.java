@@ -12,6 +12,8 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.OrderBy;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.persistence.CascadeType;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -41,6 +43,7 @@ public class Goat {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "farmer_id", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Farmer farmer;
 
     @OneToMany(
@@ -67,4 +70,14 @@ public class Goat {
     public void setFarmer(Farmer farmer) { this.farmer = farmer; }
     public List<Vaccination> getVaccinations() { return vaccinations; }
     public void setVaccinations(List<Vaccination> vaccinations) { this.vaccinations = vaccinations; }
+
+    public void addVaccination(Vaccination vaccination) {
+        vaccinations.add(vaccination);
+        vaccination.setGoat(this);
+    }
+
+    public void removeVaccination(Vaccination vaccination) {
+        vaccinations.remove(vaccination);
+        vaccination.setGoat(null);
+    }
 }

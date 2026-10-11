@@ -1,5 +1,8 @@
 package com.farmgoat.registration;
 
+import com.farmgoat.registration.model.Goat;
+import com.farmgoat.registration.model.Farmer;
+import com.farmgoat.registration.model.Vaccination;
 import com.farmgoat.registration.repository.FarmerRepository;
 import com.farmgoat.registration.repository.GoatRepository;
 import com.farmgoat.registration.repository.VaccinationRepository;
@@ -8,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.mock.web.MockHttpSession;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -38,6 +42,9 @@ class ApplicationSmokeTest {
 
     @Autowired
     private VaccinationRepository vaccinationRepository;
+
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
 
     @Test
     void loginAndRegistrationFlowWorks() throws Exception {
@@ -81,7 +88,8 @@ class ApplicationSmokeTest {
                 .andExpect(content().string(containsString("Test Farmer")));
         mockMvc.perform(get(farmerLocation).session(session))
                 .andExpect(status().isOk())
-                .andExpect(content().string(containsString("FARMER PROFILE")));
+                .andExpect(content().string(containsString("FARMER PROFILE")))
+                .andExpect(content().string(containsString("Delete farmer")));
         mockMvc.perform(get("/goats/farmer/" + farmerId + "/new").session(session))
                 .andExpect(status().isOk())
                 .andExpect(content().string(containsString("Register a goat")));
@@ -114,10 +122,67 @@ class ApplicationSmokeTest {
         mockMvc.perform(get("/goats/" + goatId).session(session))
                 .andExpect(status().isOk())
                 .andExpect(content().string(containsString("Test vaccine")))
-                .andExpect(content().string(containsString("Test Farmer")));
+                .andExpect(content().string(containsString("Test Farmer")))
+                .andExpect(content().string(containsString("Delete goat")));
 
         org.junit.jupiter.api.Assertions.assertEquals(3, farmerRepository.count());
         org.junit.jupiter.api.Assertions.assertEquals(4, goatRepository.count());
         org.junit.jupiter.api.Assertions.assertEquals(4, vaccinationRepository.count());
+
+        mockMvc.perform(post("/goats/" + goatId + "/delete").session(session).with(csrf()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/goats"));
+        org.junit.jupiter.api.Assertions.assertEquals(3, farmerRepository.count());
+        org.junit.jupiter.api.Assertions.assertEquals(3, goatRepository.count());
+        org.junit.jupiter.api.Assertions.assertEquals(3, vaccinationRepository.count());
+
+        mockMvc.perform(post("/goats/farmer/" + farmerId).session(session).with(csrf())
+                        .param("tagNumber", "TEST-2")
+                        .param("name", "Second Test Goat")
+                        .param("breed", "Boer")
+                        .param("gender", "Male")
+                        .param("dateOfBirth", LocalDate.now().minusYears(2).toString()))
+                .andExpect(status().is3xxRedirection());
+        Goat testGoat = goatRepository.findByTagNumberIgnoreCase("TEST-2").orElseThrow();
+        mockMvc.perform(post("/goats/" + testGoat.getId() + "/vaccinations").session(session).with(csrf())
+                        .param("vaccineName", "Cascade test vaccine")
+                        .param("vaccinationDate", LocalDate.now().minusDays(2).toString())
+                        .param("nextDueDate", LocalDate.now().plusMonths(6).toString())
+                        .param("notes", "Must be deleted with the farmer"))
+                .andExpect(status().is3xxRedirection());
+        org.junit.jupiter.api.Assertions.assertEquals(4, goatRepository.count());
+        org.junit.jupiter.api.Assertions.assertEquals(4, vaccinationRepository.count());
+
+        mockMvc.perform(post("/farmers/" + farmerId + "/delete").session(session).with(csrf()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/farmers"));
+        org.junit.jupiter.api.Assertions.assertEquals(2, farmerRepository.count());
+        org.junit.jupiter.api.Assertions.assertEquals(3, goatRepository.count());
+        org.junit.jupiter.api.Assertions.assertEquals(3, vaccinationRepository.count());
+
+        Farmer sqlFarmer = new Farmer();
+        sqlFarmer.setFullName("SQL Cascade Farmer");
+        sqlFarmer.setPhone("9000000002");
+        sqlFarmer.setVillage("SQL Village");
+        farmerRepository.save(sqlFarmer);
+        Goat sqlGoat = new Goat();
+        sqlGoat.setTagNumber("SQL-1");
+        sqlGoat.setName("SQL Test Goat");
+        sqlGoat.setBreed("Boer");
+        sqlGoat.setGender("Female");
+        sqlGoat.setFarmer(sqlFarmer);
+        goatRepository.save(sqlGoat);
+        Vaccination sqlVaccination = new Vaccination();
+        sqlVaccination.setVaccineName("SQL test vaccine");
+        sqlVaccination.setVaccinationDate(LocalDate.now().minusDays(1));
+        sqlVaccination.setNextDueDate(LocalDate.now().plusMonths(6));
+        sqlVaccination.setGoat(sqlGoat);
+        vaccinationRepository.save(sqlVaccination);
+
+        jdbcTemplate.update("DELETE FROM farmer WHERE id = ?", sqlFarmer.getId());
+        org.junit.jupiter.api.Assertions.assertEquals(2, farmerRepository.count());
+        org.junit.jupiter.api.Assertions.assertEquals(3, goatRepository.count());
+        org.junit.jupiter.api.Assertions.assertEquals(3, vaccinationRepository.count());
+
     }
 }

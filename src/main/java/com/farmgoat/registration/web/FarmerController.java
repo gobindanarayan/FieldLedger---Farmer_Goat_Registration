@@ -66,4 +66,14 @@ public class FarmerController {
         model.addAttribute("farmer", farmer);
         return "farmers/details";
     }
+
+    @PostMapping("/{farmerId}/delete")
+    public String delete(@PathVariable Long farmerId, RedirectAttributes redirectAttributes) {
+        Farmer farmer = farmerRepository.findById(farmerId).orElse(null);
+        if (farmer == null) return "redirect:/farmers?missing";
+
+        farmerRepository.delete(farmer);
+        redirectAttributes.addFlashAttribute("success", "Farmer, goats, and vaccination records deleted.");
+        return "redirect:/farmers";
+    }
 }

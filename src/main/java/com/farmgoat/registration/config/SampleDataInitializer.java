@@ -78,7 +78,7 @@ public class SampleDataInitializer {
         goat.setBreed(breed);
         goat.setGender(gender);
         goat.setDateOfBirth(dateOfBirth);
-        goat.setFarmer(farmer);
+            farmer.addGoat(goat);
         return goat;
     }
 
@@ -88,7 +88,7 @@ public class SampleDataInitializer {
         vaccination.setVaccinationDate(date);
         vaccination.setNextDueDate(nextDate);
         vaccination.setNotes(notes);
-        vaccination.setGoat(goat);
+        goat.addVaccination(vaccination);
         return vaccination;
     }
 }

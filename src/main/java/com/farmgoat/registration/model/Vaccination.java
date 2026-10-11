@@ -10,6 +10,8 @@ import jakarta.persistence.ManyToOne;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.time.LocalDate;
 
@@ -34,6 +36,7 @@ public class Vaccination {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "goat_id", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Goat goat;
 
     public Long getId() { return id; }

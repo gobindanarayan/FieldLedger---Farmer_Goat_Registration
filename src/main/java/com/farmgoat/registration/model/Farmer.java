@@ -51,4 +51,14 @@ public class Farmer {
     public void setAddress(String address) { this.address = address; }
     public List<Goat> getGoats() { return goats; }
     public void setGoats(List<Goat> goats) { this.goats = goats; }
+
+    public void addGoat(Goat goat) {
+        goats.add(goat);
+        goat.setFarmer(this);
+    }
+
+    public void removeGoat(Goat goat) {
+        goats.remove(goat);
+        goat.setFarmer(null);
+    }
 }

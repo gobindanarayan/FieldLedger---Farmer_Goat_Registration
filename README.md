@@ -25,6 +25,8 @@ If MySQL is not installed, download MySQL Community Server for Windows from the 
 
 Start MySQL Server. In MySQL Workbench, open a query window and run the SQL in `database/setup.sql`. The only SQL setup needed is creation of the empty database; when the app starts, JPA creates the tables from the Java entity classes.
 
+The database follows this relationship: **Farmer → Goats → Vaccinations**. New installations get MySQL foreign keys that cascade deletes from the entity mappings. If this database already existed before cascade delete was added, run `database/enable-cascade-delete.sql` in Workbench after the app has started once and created its tables. This updates the two foreign keys without deleting your records.
+
 The default connection is:
 
 - Database: `farmer_goat_register`
@@ -103,11 +105,15 @@ The separate `FarmerForm`, `GoatForm`, and `VaccinationForm` classes hold only t
 - Dashboard totals: farmer, goat, and vaccination record counts.
 - Add and view farmers: Farmers → Add farmer; open any farmer for the profile.
 - Register multiple goats: use “Register a goat” from a farmer profile.
+- Delete a goat: use “Delete goat” on its profile; its vaccination records are removed too.
+- Delete a farmer: use “Delete farmer” on the profile; all of that farmer's goats and their vaccination records are removed too.
 - Search: farmer list searches name, phone, and village; goat list searches tag, name, breed, and farmer.
 - Goat detail: includes tag, breed, gender, date of birth, farmer contact/location, and vaccination history.
 - Add vaccination: from a goat profile; the server validates the dates.
 - Responsive green website: pages adapt to mobile and desktop widths.
 - MySQL persistence: entity tables are created automatically when the app connects.
+
+The delete buttons send a protected POST request. JPA's `cascade = CascadeType.ALL` handles deletes through the application, and Hibernate's `@OnDelete(CASCADE)` keeps the MySQL foreign keys aligned. The SQL migration is for existing databases because `ddl-auto=update` does not reliably rewrite a foreign key that already exists.
 
 ## 7. Troubleshooting
 
