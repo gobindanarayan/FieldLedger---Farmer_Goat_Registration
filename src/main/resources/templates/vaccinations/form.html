@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Add vaccination · FieldLedger</title><link rel="stylesheet" th:href="@{/css/styles.css}"></head>
+<body>
+<div th:replace="~{fragments/layout :: layout(~{::section})}">
+    <section class="form-page">
+        <a class="back-link" th:href="@{/goats/{id}(id=${goat.id})}">← Back to goat</a>
+        <div class="form-heading"><span class="eyebrow green-eyebrow">HERD HEALTH RECORD</span><h1>Add vaccination</h1><p class="muted"><strong th:text="${goat.name}">Goat</strong> · Tag <span th:text="${goat.tagNumber}">G-1001</span></p></div>
+        <form th:action="@{/goats/{id}/vaccinations(id=${goat.id})}" th:object="${vaccinationForm}" method="post" class="form-card form-stack" data-date-check>
+            <div class="field"><label for="vaccineName">Vaccine name <span class="required">*</span></label><input id="vaccineName" th:field="*{vaccineName}" placeholder="e.g. PPR" required><small class="field-error" th:errors="*{vaccineName}"></small></div>
+            <div class="field-row"><div class="field"><label for="vaccinationDate">Vaccination date <span class="required">*</span></label><input id="vaccinationDate" th:field="*{vaccinationDate}" type="date" data-not-future required><small class="field-error" th:errors="*{vaccinationDate}"></small></div>
+                <div class="field"><label for="nextDueDate">Next due date <span class="required">*</span></label><input id="nextDueDate" th:field="*{nextDueDate}" type="date" required><small class="field-error" th:errors="*{nextDueDate}"></small></div></div>
+            <div class="field"><label for="notes">Notes <span class="optional">OPTIONAL</span></label><textarea id="notes" th:field="*{notes}" rows="4" placeholder="Dose, batch number, or other helpful information"></textarea><small class="field-error" th:errors="*{notes}"></small></div>
+            <div class="form-actions"><a class="button button-quiet" th:href="@{/goats/{id}(id=${goat.id})}">Cancel</a><button class="button button-primary" type="submit">Save vaccination <span>→</span></button></div>
+        </form>
+    </section>
+</div>
+<script th:src="@{/js/app.js}"></script>
+</body>
+</html>

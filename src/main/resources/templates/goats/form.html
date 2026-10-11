@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Register goat · FieldLedger</title><link rel="stylesheet" th:href="@{/css/styles.css}"></head>
+<body>
+<div th:replace="~{fragments/layout :: layout(~{::section})}">
+    <section class="form-page">
+        <a class="back-link" th:href="@{/farmers/{id}(id=${farmer.id})}">← Back to farmer</a>
+        <div class="form-heading"><span class="eyebrow green-eyebrow">NEW HERD ENTRY</span><h1>Register a goat</h1><p class="muted">Owner: <strong th:text="${farmer.fullName}">Farmer</strong> · <span th:text="${farmer.village}">Village</span></p></div>
+        <form th:action="@{/goats/farmer/{id}(id=${farmer.id})}" th:object="${goatForm}" method="post" class="form-card form-stack">
+            <div class="field-row"><div class="field"><label for="tagNumber">Ear tag number <span class="required">*</span></label><input id="tagNumber" th:field="*{tagNumber}" placeholder="e.g. G-1003" required><small class="field-error" th:errors="*{tagNumber}"></small><small class="field-help">Each goat must have a unique tag.</small></div>
+                <div class="field"><label for="name">Goat name <span class="required">*</span></label><input id="name" th:field="*{name}" placeholder="e.g. Chinna" required><small class="field-error" th:errors="*{name}"></small></div></div>
+            <div class="field-row"><div class="field"><label for="breed">Breed <span class="required">*</span></label><input id="breed" th:field="*{breed}" placeholder="e.g. Sirohi" required><small class="field-error" th:errors="*{breed}"></small></div>
+                <div class="field"><label for="gender">Gender <span class="required">*</span></label><select id="gender" th:field="*{gender}" required><option value="">Choose gender</option><option value="Female">Female</option><option value="Male">Male</option></select><small class="field-error" th:errors="*{gender}"></small></div></div>
+            <div class="field"><label for="dateOfBirth">Date of birth <span class="required">*</span></label><input id="dateOfBirth" th:field="*{dateOfBirth}" type="date" data-not-future required><small class="field-error" th:errors="*{dateOfBirth}"></small></div>
+            <div class="form-actions"><a class="button button-quiet" th:href="@{/farmers/{id}(id=${farmer.id})}">Cancel</a><button class="button button-primary" type="submit">Save goat <span>→</span></button></div>
+        </form>
+    </section>
+</div>
+<script th:src="@{/js/app.js}"></script>
+</body>
+</html>

@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Goat register · FieldLedger</title><link rel="stylesheet" th:href="@{/css/styles.css}"></head>
+<body>
+<div th:replace="~{fragments/layout :: layout(~{::section})}">
+    <section>
+        <div class="page-heading"><div><a class="back-link" th:href="@{/}">← Overview</a><span class="eyebrow green-eyebrow">HERD RECORDS</span><h1>Goat register</h1><p class="muted">Search by tag, name, breed, or farmer.</p></div><a class="button button-primary" th:href="@{/farmers}">＋ Register a goat</a></div>
+        <div class="toolbar"><form th:action="@{/goats}" method="get" class="search-form"><label class="sr-only" for="goat-search">Search goats</label><span>⌕</span><input id="goat-search" name="q" th:value="${q}" placeholder="Search tag, name, breed, farmer"><button type="submit">Search</button></form><span class="result-count"><strong th:text="${#lists.size(goats)}">0</strong> goats</span></div>
+        <div class="table-card"><table><thead><tr><th>GOAT</th><th>BREED</th><th>GENDER</th><th>FARMER</th><th>VILLAGE</th><th></th></tr></thead><tbody>
+            <tr th:each="goat : ${goats}"><td><span class="tag-code" th:text="${goat.tagNumber}">G-1001</span><a class="table-primary" th:href="@{/goats/{id}(id=${goat.id})}" th:text="${goat.name}">Name</a></td><td th:text="${goat.breed}">Breed</td><td th:text="${goat.gender}">Gender</td><td><a class="text-link" th:href="@{/farmers/{id}(id=${goat.farmer.id})}" th:text="${goat.farmer.fullName}">Farmer</a></td><td th:text="${goat.farmer.village}">Village</td><td><a class="row-link" th:href="@{/goats/{id}(id=${goat.id})}">Details →</a></td></tr>
+            <tr th:if="${#lists.isEmpty(goats)}"><td colspan="6" class="empty-state"><span>♞</span><strong>No goats found</strong><small>Try another search or register a goat from a farmer's profile.</small><a class="button button-outline" th:href="@{/farmers}">Choose a farmer</a></td></tr>
+        </tbody></table></div>
+    </section>
+</div>
+<script th:src="@{/js/app.js}"></script>
+</body>
+</html>

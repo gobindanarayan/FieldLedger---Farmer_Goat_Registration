@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Goat details · FieldLedger</title><link rel="stylesheet" th:href="@{/css/styles.css}"></head>
+<body>
+<div th:replace="~{fragments/layout :: layout(~{::section})}">
+    <section>
+        <a class="back-link" th:href="@{/goats}">← Back to goats</a>
+        <div class="profile-heading"><div class="avatar avatar-goat">♞</div><div><span class="eyebrow green-eyebrow">GOAT PROFILE</span><h1 th:text="${goat.name}">Goat name</h1><p class="muted">Tag <strong class="tag-code" th:text="${goat.tagNumber}">G-1001</strong> · <span th:text="${goat.breed}">Breed</span></p></div><a class="button button-primary profile-action" th:href="@{/goats/{id}/vaccinations/new(id=${goat.id})}">＋ Add vaccination</a></div>
+        <div class="detail-grid">
+            <article class="info-card"><span class="eyebrow green-eyebrow">GOAT DETAILS</span><div class="detail-line"><span>Ear tag</span><strong th:text="${goat.tagNumber}">Tag</strong></div><div class="detail-line"><span>Breed</span><strong th:text="${goat.breed}">Breed</strong></div><div class="detail-line"><span>Gender</span><strong th:text="${goat.gender}">Gender</strong></div><div class="detail-line"><span>Date of birth</span><strong th:text="${goat.dateOfBirth}">Date</strong></div></article>
+            <article class="info-card owner-card"><span class="eyebrow green-eyebrow">REGISTERED OWNER</span><a class="owner-name" th:href="@{/farmers/{id}(id=${goat.farmer.id})}" th:text="${goat.farmer.fullName}">Farmer</a><div class="detail-line"><span>Phone</span><strong th:text="${goat.farmer.phone}">Phone</strong></div><div class="detail-line"><span>Village</span><strong th:text="${goat.farmer.village}">Village</strong></div><a class="text-link" th:href="@{/farmers/{id}(id=${goat.farmer.id})}">Open farmer profile →</a></article>
+        </div>
+        <div class="section-title"><div><span class="eyebrow green-eyebrow">HEALTH HISTORY</span><h2>Vaccinations <span class="count-pill" th:text="${#lists.size(vaccinations)}">0</span></h2></div><a class="text-link" th:href="@{/goats/{id}/vaccinations/new(id=${goat.id})}">Add a record →</a></div>
+        <div class="table-card"><table><thead><tr><th>VACCINE</th><th>DATE GIVEN</th><th>NEXT DUE</th><th>NOTES</th></tr></thead><tbody>
+            <tr th:each="record : ${vaccinations}"><td><strong class="table-primary" th:text="${record.vaccineName}">PPR</strong></td><td th:text="${record.vaccinationDate}">Date</td><td><span class="due-pill" th:text="${record.nextDueDate}">Due date</span></td><td th:text="${#strings.isEmpty(record.notes) ? '—' : record.notes}">Notes</td></tr>
+            <tr th:if="${#lists.isEmpty(vaccinations)}"><td colspan="4" class="empty-state"><span>＋</span><strong>No vaccination records yet</strong><small>Add the first health record for this goat.</small><a class="button button-outline" th:href="@{/goats/{id}/vaccinations/new(id=${goat.id})}">Add vaccination</a></td></tr>
+        </tbody></table></div>
+    </section>
+</div>
+<script th:src="@{/js/app.js}"></script>
+</body>
+</html>

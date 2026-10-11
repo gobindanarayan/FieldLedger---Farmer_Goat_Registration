@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<body>
+<div th:fragment="layout(content)">
+    <header class="topbar">
+        <a class="brand" th:href="@{/}">
+            <span class="brand-mark">✦</span>
+            <span>Field<span class="brand-light">Ledger</span><small>FARM &amp; HERD RECORDS</small></span>
+        </a>
+        <nav class="main-nav" aria-label="Main navigation">
+            <a th:href="@{/}">Overview</a>
+            <a th:href="@{/farmers}">Farmers</a>
+            <a th:href="@{/goats}">Goats</a>
+        </nav>
+        <div class="topbar-right">
+            <span class="signed-in"><span class="online-dot"></span>Signed in</span>
+            <form th:action="@{/logout}" method="post">
+                <button class="logout-button" type="submit">Log out <span aria-hidden="true">↗</span></button>
+            </form>
+        </div>
+    </header>
+
+    <main class="page-wrap">
+        <div class="flash success" th:if="${success}">
+            <span th:text="${success}">Saved</span>
+            <button type="button" class="flash-close" aria-label="Dismiss message">×</button>
+        </div>
+        <div class="flash info" th:if="${param.missing}">That record could not be found. The list is shown instead.</div>
+        <section th:replace="${content}"></section>
+        <footer class="page-footer">FieldLedger · Simple records for healthier herds</footer>
+    </main>
+</div>
+</body>
+</html>

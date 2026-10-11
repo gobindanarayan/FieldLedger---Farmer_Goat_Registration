@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Sign in · FieldLedger</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body class="login-page">
+<main class="login-layout">
+    <section class="login-story">
+        <a class="brand brand-on-dark" th:href="@{/login}">
+            <span class="brand-mark">✦</span>
+            <span>Field<span class="brand-light">Ledger</span><small>FARM &amp; HERD RECORDS</small></span>
+        </a>
+        <div class="login-story-copy">
+            <span class="eyebrow">A calmer way to keep records</span>
+            <h1>Good care starts with a clear record.</h1>
+            <p>Keep farmer details, herd registrations, and vaccination dates together in one simple place.</p>
+        </div>
+        <div class="login-landscape" aria-hidden="true">
+            <span class="sun"></span><span class="hill hill-one"></span><span class="hill hill-two"></span>
+            <span class="goat-silhouette">♞</span>
+        </div>
+        <div class="login-caption">FIELD NOTES <span>·</span> HERD HEALTH <span>·</span> GROWING TOGETHER</div>
+    </section>
+
+    <section class="login-panel">
+        <div class="login-card">
+            <span class="eyebrow green-eyebrow">WELCOME BACK</span>
+            <h2>Sign in to your account</h2>
+            <p class="muted">Enter your details to open your farm dashboard.</p>
+            <div class="flash error" th:if="${param.error}">The username or password is incorrect. Please try again.</div>
+            <div class="flash success" th:if="${param.logout}">You have been signed out safely.</div>
+            <form th:action="@{/login}" method="post" class="form-stack">
+                <label for="username">Username</label>
+                <input id="username" name="username" type="text" autocomplete="username" required autofocus placeholder="Your username">
+                <label for="password">Password</label>
+                <input id="password" name="password" type="password" autocomplete="current-password" required placeholder="Your password">
+                <button class="button button-primary button-full" type="submit">Sign in <span aria-hidden="true">→</span></button>
+            </form>
+            <div class="demo-hint"><strong>Demo account</strong><span>Username: demo &nbsp;·&nbsp; Password: demo12345</span></div>
+        </div>
+        <p class="login-footer">FieldLedger · Farmer and Goat Registration System</p>
+    </section>
+</main>
+</body>
+</html>

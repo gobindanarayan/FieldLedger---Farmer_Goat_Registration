@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Overview · FieldLedger</title><link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+<div th:replace="~{fragments/layout :: layout(~{::section})}">
+    <section>
+        <div class="welcome-row">
+            <div><span class="eyebrow green-eyebrow">FARM OVERVIEW</span><h1>Your records at a glance</h1>
+                <p class="muted">A healthy herd begins with good information.</p></div>
+            <a class="button button-primary" th:href="@{/farmers/new}"><span aria-hidden="true">＋</span> Register a farmer</a>
+        </div>
+
+        <div class="stats-grid">
+            <article class="stat-card stat-farmers"><div class="stat-top"><span class="stat-icon">♧</span><span class="stat-label">PEOPLE</span></div>
+                <p class="stat-number" th:text="${farmerCount}">0</p><p class="stat-name">Registered farmers</p><a th:href="@{/farmers}">View farmer list <span>→</span></a></article>
+            <article class="stat-card stat-goats"><div class="stat-top"><span class="stat-icon">♞</span><span class="stat-label">HERD</span></div>
+                <p class="stat-number" th:text="${goatCount}">0</p><p class="stat-name">Registered goats</p><a th:href="@{/goats}">View goat register <span>→</span></a></article>
+            <article class="stat-card stat-vaccines"><div class="stat-top"><span class="stat-icon">＋</span><span class="stat-label">HEALTH</span></div>
+                <p class="stat-number" th:text="${vaccinationCount}">0</p><p class="stat-name">Vaccination records</p><a th:href="@{/goats}">Review herd health <span>→</span></a></article>
+        </div>
+
+        <section class="welcome-banner">
+            <div class="banner-mark">✦</div><div><span class="eyebrow">KEEP YOUR HERD ON TRACK</span>
+                <h2>Small records make a big difference.</h2><p>Register each goat and keep vaccination dates close at hand.</p></div>
+            <a class="button button-light" th:href="@{/goats}">Explore goats <span>→</span></a>
+        </section>
+        <div class="dashboard-note"><span class="note-icon">i</span><p><strong>Getting started</strong><br>Use the farmer register to add a farmer, then register one or more goats under that farmer.</p></div>
+    </section>
+</div>
+<script th:src="@{/js/app.js}"></script>
+</body>
+</html>

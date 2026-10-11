@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Farmer details · FieldLedger</title><link rel="stylesheet" th:href="@{/css/styles.css}"></head>
+<body>
+<div th:replace="~{fragments/layout :: layout(~{::section})}">
+    <section>
+        <a class="back-link" th:href="@{/farmers}">← Back to farmers</a>
+        <div class="profile-heading"><div class="avatar avatar-farmer" th:text="${#strings.substring(farmer.fullName,0,1)}">F</div><div><span class="eyebrow green-eyebrow">FARMER PROFILE</span><h1 th:text="${farmer.fullName}">Farmer</h1><p class="muted" th:text="${farmer.village}">Village</p></div><a class="button button-primary profile-action" th:href="@{/goats/farmer/{id}/new(id=${farmer.id})}">＋ Register a goat</a></div>
+        <div class="detail-grid">
+            <article class="info-card"><span class="eyebrow green-eyebrow">CONTACT DETAILS</span><div class="detail-line"><span>Phone</span><strong th:text="${farmer.phone}">Phone</strong></div><div class="detail-line"><span>Village / town</span><strong th:text="${farmer.village}">Village</strong></div><div class="detail-line"><span>Address</span><strong th:text="${#strings.isEmpty(farmer.address) ? 'Not provided' : farmer.address}">Address</strong></div></article>
+            <article class="info-card herd-summary"><span class="eyebrow green-eyebrow">REGISTERED HERD</span><strong class="summary-number" th:text="${#lists.size(farmer.goats)}">0</strong><span>goats under this farmer</span><a th:href="@{/goats}">View all goats →</a></article>
+        </div>
+        <div class="section-title"><div><span class="eyebrow green-eyebrow">FARMER'S HERD</span><h2>Goats</h2></div><a class="text-link" th:href="@{/goats/farmer/{id}/new(id=${farmer.id})}">Register another goat →</a></div>
+        <div class="table-card"><table><thead><tr><th>TAG</th><th>NAME</th><th>BREED</th><th>GENDER</th><th></th></tr></thead><tbody>
+            <tr th:each="goat : ${farmer.goats}"><td><span class="tag-code" th:text="${goat.tagNumber}">G-1001</span></td><td><a class="table-primary" th:href="@{/goats/{id}(id=${goat.id})}" th:text="${goat.name}">Goat</a></td><td th:text="${goat.breed}">Breed</td><td th:text="${goat.gender}">Gender</td><td><a class="row-link" th:href="@{/goats/{id}(id=${goat.id})}">Details →</a></td></tr>
+            <tr th:if="${#lists.isEmpty(farmer.goats)}"><td colspan="5" class="empty-state"><span>♞</span><strong>No goats registered yet</strong><small>Add the farmer's first goat with its unique ear tag.</small></td></tr>
+        </tbody></table></div>
+    </section>
+</div>
+<script th:src="@{/js/app.js}"></script>
+</body>
+</html>

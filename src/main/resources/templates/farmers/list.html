@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Farmers · FieldLedger</title><link rel="stylesheet" th:href="@{/css/styles.css}"></head>
+<body>
+<div th:replace="~{fragments/layout :: layout(~{::section})}">
+    <section>
+        <div class="page-heading">
+            <div><a class="back-link" th:href="@{/}">← Overview</a><span class="eyebrow green-eyebrow">PEOPLE &amp; PLACES</span><h1>Farmer register</h1><p class="muted">Keep contact details and herd ownership together.</p></div>
+            <a class="button button-primary" th:href="@{/farmers/new}">＋ Add farmer</a>
+        </div>
+        <div class="toolbar">
+            <form th:action="@{/farmers}" method="get" class="search-form"><label class="sr-only" for="farmer-search">Search farmers</label><span>⌕</span><input id="farmer-search" name="q" th:value="${q}" placeholder="Search name, phone, or village"><button type="submit">Search</button></form>
+            <span class="result-count"><strong th:text="${#lists.size(farmers)}">0</strong> farmers</span>
+        </div>
+        <div class="table-card">
+            <table><thead><tr><th>FARMER</th><th>PHONE</th><th>VILLAGE</th><th>GOATS</th><th></th></tr></thead>
+                <tbody><tr th:each="farmer : ${farmers}">
+                    <td><a class="table-primary" th:href="@{/farmers/{id}(id=${farmer.id})}" th:text="${farmer.fullName}">Farmer name</a><span class="table-sub" th:text="${farmer.address}">Address</span></td>
+                    <td th:text="${farmer.phone}">Phone</td><td th:text="${farmer.village}">Village</td>
+                    <td><span class="count-pill" th:text="${#lists.size(farmer.goats)}">0</span></td>
+                    <td><a class="row-link" th:href="@{/farmers/{id}(id=${farmer.id})}">Open →</a></td>
+                </tr>
+                <tr th:if="${#lists.isEmpty(farmers)}"><td colspan="5" class="empty-state"><span>♧</span><strong>No farmers found</strong><small>Try another search or add a farmer to begin.</small></td></tr>
+                </tbody></table>
+        </div>
+    </section>
+</div>
+<script th:src="@{/js/app.js}"></script>
+</body>
+</html>
