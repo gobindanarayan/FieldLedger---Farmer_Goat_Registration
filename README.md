@@ -120,6 +120,6 @@ The separate `FarmerForm`, `GoatForm`, and `VaccinationForm` classes hold only t
 
 This project is intended as a beginner-friendly internship demo. For a real production deployment, configure a strong account, switch off demo-data creation, use a restricted MySQL account, and review deployment security settings.
 
-## 8. Short presentation explanation
+## 8. Short Explanation
 
 > “This project is a Farmer and Goat Registration System built with Java and Spring Boot. It lets a staff member sign in, register farmers, add several goats under each farmer, and record vaccination dates. Spring MVC handles the website pages, Spring Data JPA connects the Java records to MySQL tables, and Thymeleaf displays the data in the browser. Spring Security protects the pages and stores passwords as BCrypt hashes. The dashboard counts the records, and a goat profile brings its owner details and vaccination history together.”
