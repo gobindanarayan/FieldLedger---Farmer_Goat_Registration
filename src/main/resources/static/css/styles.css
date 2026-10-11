@@ -9,7 +9,7 @@
     --line:#e4eae5;
     --paper:#fff;
     --canvas:#f7f9f6;
-    --gold:#dcb85b;
+    --gold:#dcbput85b;
     --error:#a63c38;
     --shadow:0 12px 34px rgba(27,57,42,.07)
 }
@@ -1153,4 +1153,20 @@ tbody tr:last-child td {
     .page-footer {
         padding-top:20px
     }
+}
+
+input[type="text"],
+input[type="password"] {
+    border-radius: 8px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    outline: none;
+    box-sizing: border-box;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+input[type="text"]:focus,
+input[type="password"]:focus {
+    border-color: #087f68;
+    box-shadow: 0 0 0 3px rgba(8, 127, 104, 0.12);
 }
